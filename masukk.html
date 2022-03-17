@@ -55,32 +55,36 @@
       <div class="row justify-content-center">
         <div class="col-md-6">
           <div class="alert alert-success alert-dismissible fade show d-none my-alert" role="alert">
-            <strong>Berhasil</strong> data berhasil dimasukkan
+            <strong>Berhasil!</strong> Data berhasil dimasukkan
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>
-            <form name="persediaan">
+            <form name="submit-to-google-sheet">
                 <div class="mb-3">
                 <label for="barang" class="form-label">Barang</label>
-                <input type="text" class="form-control" id="barang" aria-describedby="barang" name="barang" />
+                <input type="text" class="form-control" id="barang" aria-describedby="barang" name="barang" required />
                 </div>
                 <div class="mb-3">
                 <label for="supplier" class="form-label">Supplier</label>
-                <input type="text" class="form-control" id="supplier" name="supplier" />
+                <input type="text" class="form-control" id="supplier" name="supplier" required />
                 </div>
                 <div class="mb-3">
                 <label for="jumlah" class="form-label">Jumlah</label>
-                <input type="text" class="form-control" id="jumlah" name="jumlah" />
+                <input type="text" class="form-control" id="jumlah" name="jumlah" required />
                 </div>
                 <div class="mb-3">
                 <label for="satuan" class="form-label">Satuan</label>
-                <input type="text" class="form-control" id="satuan" name="satuan" />
+                <input type="text" class="form-control" id="satuan" name="satuan" required />
                 </div>
                 <div class="mb-3">
                 <label for="harga" class="form-label">Harga</label>
-                <input type="text" class="form-control" id="harga" name="harga" />
+                <input type="text" class="form-control" id="harga" name="harga" required />
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
+                <button type="submit" class="btn btn-primary btn-kirim">Kirim</button>
+                <button class="btn btn-primary btn-loading d-none" type="button" disabled>
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  Loading...
+                </button>
+              </form>
         </div>
       </div>
     </div>
@@ -95,5 +99,33 @@
     </svg>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script>
+      const scriptURL = 'https://script.google.com/macros/s/AKfycbzDwgdKga4LMpzt7gA6rNuXtJAOabZYq-uWNV1rEPNAdAlcKewqqG8LWTtFhJ0lovJm/exec'
+      const form = document.forms['submit-to-google-sheet']
+      const btnKirim = document.querySelector('.btn-kirim');
+      const btnLoading = document.querySelector('.btn-loading');
+      const myAlert = document.querySelector('.my-alert');
+
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        // ketika tombol submit diklik
+        // tampilkan tombol loading, hilangkan tombol kirim
+        btnLoading.classList.toggle('d-none');
+        btnKirim.classList.toggle('d-none');
+        fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+          .then(response => {
+            //tampilkan tombol kirim, hilangkan tombol kirim
+            btnLoading.classList.toggle('d-none');
+            btnKirim.classList.toggle('d-none');
+            //tampilan alert
+            myAlert.classList.toggle('d-none');
+            //reset formnya
+            form.reset();
+            console.log('Success!', response);
+
+      })
+          .catch(error => console.error('Error!', error.message))
+      })
+    </script>
   </body>
 </html>
