@@ -1,0 +1,22 @@
+.jumbotron {
+  background-color: #e2edff;
+}
+
+section {
+  padding-top: 8rem;
+}
+
+.icon-service {
+  width: 80px;
+  height: 80px;
+  border: solid #000 2px;
+  border-radius: 50%;
+  color: #000;
+}
+
+.hovered-card {
+  transition: 0.3s;
+}
+.hovered-card:hover {
+  transform: scale(1.1);
+}
